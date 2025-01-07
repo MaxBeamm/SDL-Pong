@@ -6,6 +6,9 @@ Game::~Game() {}
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
 
+	windowWidth = width; 
+	windowHeight = height;
+
 	int flags{ 0 };
 	if (fullscreen) {
 		flags = SDL_WINDOW_FULLSCREEN;
@@ -27,7 +30,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		}
 
 	
-		paddleLeft = new Paddle(5, 20, 40, 150);
+		paddleLeft = new Paddle(10, 20, 40, 150, Paddle::Type::LEFT);
+
+		paddleRight = new Paddle(width - 40 - 10, 20, 40, 150, Paddle::Type::RIGHT);
+		
+		ball = new Ball(width /2, height /2, 10, 10, 5);
 
 		isRunning = true;
 	}
@@ -41,6 +48,9 @@ void Game::render(){
 	SDL_RenderClear(renderer);
 
 	paddleLeft->render(renderer);
+	paddleRight->render(renderer);
+
+	ball->render(renderer);
 
 	SDL_RenderPresent(renderer);
 
@@ -49,7 +59,32 @@ void Game::render(){
 void Game::update() {
 
 	paddleLeft->update();
+	paddleRight->update();
+	ball->update();
 
+	checkCollisions();
+
+}
+
+void Game::checkCollisions() {
+	SDL_Rect ballRect = ball->getRect();
+	SDL_Rect paddle1Rect = paddleLeft->getRect();
+	SDL_Rect paddle2Rect = paddleRight->getRect();
+
+	std::pair<int, int> currVel = ball->getVelocity();
+	
+	//Collision with top or bottom of screen
+	if (ballRect.y <= 0 || ballRect.y + ballRect.h >= windowHeight) {
+		
+		ball->setVelocity({ currVel.first, -currVel.second });
+	}
+
+	///Collision with left or right of screen
+	if (ballRect.x <= 0 || ballRect.x + ballRect.w >= windowWidth) {
+
+		ball->setVelocity({ -currVel.first, currVel.second });
+		
+	}
 }
 
 void Game::handleEvents() {
@@ -64,6 +99,7 @@ void Game::handleEvents() {
 			break;
 	}
 	paddleLeft->handleInput(event);
+	paddleRight->handleInput(event);
 }
 
 void Game::clean() {
@@ -72,6 +108,9 @@ void Game::clean() {
 	window = nullptr;
 	SDL_DestroyRenderer(renderer);
 	renderer = nullptr;
+	
+	paddleLeft = nullptr;
+	paddleRight = nullptr;
 
 	SDL_Quit();
 

@@ -5,13 +5,15 @@ class Paddle {
 
 	public:
 
-		Paddle(int x, int y, int width, int height);
+		enum class Type { LEFT, RIGHT };
+		enum class Direction { NONE, UP, DOWN };
 
-		enum class Direction {NONE, UP, DOWN};
+		Paddle(int x, int y, int width, int height, Type type);
 
 		void update();
 		void render(SDL_Renderer* renderer);
 		void handleInput(SDL_Event& Event);
+		SDL_Rect getRect();
 
 	private:
 
@@ -21,6 +23,7 @@ class Paddle {
 		int width;
 		int height;
 		Direction direction;
+		Type type;
 
 
 };
