@@ -65,6 +65,14 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
+This is a simple Pong game implemented using C++ and the SDL2 library. The goal of the project was to create a classic arcade game from scratch, without relying on a game engine, to better understand the fundamentals of game development and graphics programming.
+
+The game features two paddles, allowing either player versus player or player versus AI gameplay. Players compete to score 7 points, and the first to reach this score wins the game.
+
+The project was built to showcase basic concepts like handling user input, rendering graphics, and implementing game mechanics. It provides a hands-on approach to learning about game loops, collision detection, and AI behavior in a 2D space.
+
+Feel free to explore the code, make improvements, or use it as a starting point for your own projects!
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
